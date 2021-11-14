@@ -1,10 +1,10 @@
 class Element:
     def __init__(self, text):
         self.text = text
-        self.truth_value = True
+        self.truth_values = []
     
-    def assign_truth_value(value):
-        self.truth_value = value
+    def append_truth_value(self, value):
+        self.truth_values.append(value)
     
     
     
