@@ -29,6 +29,7 @@ def parse_formula(input):
                 new_element = Element(c)
                 element_list.append(new_element)
                 already_used_letters.append(c)
+                letter_count += 1
         #find phrases in ()
         left_indexes = []
         right_indexes = []
@@ -65,7 +66,6 @@ def parse_formula(input):
         element_list.append(Element(prem))
     
     element_list.append(Element(conc))
-    
     return element_list, letter_count
 
 
@@ -75,17 +75,21 @@ def create_columns(element_list, letter_count):
     
     # for q in element_list:
     #     print(q.text)
-    
-    
+    # 
+    # print("------------------------------------------")
     for e, element in enumerate(element_list):
         # print(element.text)
         flag = True
         if (len(element.text) == 1):
+            # print(amount_true_false)
             for i in range(row_amount):
-                if i < amount_true_false % (amount_true_false / 2) == 0:
+                if i % amount_true_false == amount_true_false / 2:    #This is problem
+                    # print("yo")
                     if flag == True:
+                        # print("T")
                         flag = False
                     else:
+                        # print("F")
                         flag = True
                 
                 element.append_truth_value(flag)
@@ -94,12 +98,10 @@ def create_columns(element_list, letter_count):
             
         else:
             new_element_text = element.text
-            print(element.text, "here")
-            for i in reversed(range(e - 1)):
-                # print(i)
-                # print(element.text, element_list[-i].text)
+            # print(element.text, "here")
+            for i in reversed(range(e)):
                 new_element_text = new_element_text.replace(element_list[i].text, str(i))
-                print(new_element_text, element_list[i].text)
+                # print(new_element_text, element_list[i].text)
             
             #Split by symbol                /\  \/  ->  <-> ~
             symbol = ""
@@ -115,6 +117,10 @@ def create_columns(element_list, letter_count):
             elif "->" in new_element_text:
                 new_element_text = new_element_text.split("->")
                 symbol = "->"
+            
+            new_element_text[0] = new_element_text[0].replace("(", "").replace(")", "")
+            new_element_text[1] = new_element_text[1].replace("(", "").replace(")", "")
+            
             
             element1 = element_list[int(new_element_text[0])]
             element2 = element_list[int(new_element_text[1])]
@@ -150,12 +156,36 @@ def create_columns(element_list, letter_count):
                             element.truth_values.append(True)
                         else:
                             element.truth_values.append(False)
+                            
+    return element_list
+                
+                
+def print_table(element_list):
+    print(element_list[1].text)
+    for x in element_list[1].truth_values:
+        print(x)
+    
+    
+    
+    # for element in element_list:
+    #     print(element.text, end='|')
+    # 
+    # print("")
+    # for i in range(len(element_list[0].truth_values)):
+    #     for j in range(len(element_list)):
+    #         print(element_list[j].truth_values[i], end="|")
+    #     print("")
+    # 
+    # print("")
+               
                 
                 
             
 def assign_truth_values(input):
-    element_list, letter_count = parse_formula(input)      
-    create_columns(element_list, letter_count)
+    element_list, letter_count = parse_formula(input)
+    # print(letter_count)      
+    elment_list = create_columns(element_list, letter_count)
+    print_table(element_list)
     
     
 def generate_url_id():
@@ -168,7 +198,7 @@ def generate_url_id():
     return id
 
 
-assign_truth_values("(P -> Q) \/ (R -> S) ∴ W")
+assign_truth_values("(P -> Q) \/ (R -> S) ∴ P")
 
 
 
