@@ -16,8 +16,7 @@ def parse_formula(input):
         prems = formula
         conc = ""
 
-    print(prems)
-    prems = prems[0].split(".")
+    prems = prems.split(".")
     
     letter_count = 0
     already_used_letters = []
@@ -73,7 +72,13 @@ def parse_formula(input):
 def create_columns(element_list, letter_count):
     row_amount = 2 ** letter_count
     amount_true_false = row_amount
+    
+    # for q in element_list:
+    #     print(q.text)
+    
+    
     for e, element in enumerate(element_list):
+        # print(element.text)
         flag = True
         if (len(element.text) == 1):
             for i in range(row_amount):
@@ -88,26 +93,31 @@ def create_columns(element_list, letter_count):
             amount_true_false /= 2
             
         else:
-            for i in range(e, len(element_list) + 1):       #Figure this out
-                element.text = element.text.replace(element_list[-i].text, str(i - 1))
+            new_element_text = element.text
+            print(element.text, "here")
+            for i in reversed(range(e - 1)):
+                # print(i)
+                # print(element.text, element_list[-i].text)
+                new_element_text = new_element_text.replace(element_list[i].text, str(i))
+                print(new_element_text, element_list[i].text)
             
             #Split by symbol                /\  \/  ->  <-> ~
             symbol = ""
-            if "/\\" in element.text:
-                element.text = element.text.split("/\\")
+            if "/\\" in new_element_text:
+                new_element_text = new_element_text.split("/\\")
                 symbol = "/\\"
-            elif "\/" in element.text:
-                element.text = element.text.split("\/")
+            elif "\/" in new_element_text:
+                new_element_text = new_element_text.split("\/")
                 symbol = "\/"
-            elif "<->" in element.text:
-                element.text = element.text.split("<->")
+            elif "<->" in new_element_text:
+                new_element_text = new_element_text.split("<->")
                 symbol = "<->"
-            elif "->" in element.text:
-                element.text = element.text.split("->")
+            elif "->" in new_element_text:
+                new_element_text = new_element_text.split("->")
                 symbol = "->"
             
-            element1 = element_list[int(element.text[0])]
-            element2 = element_list[int(element.text[1])]
+            element1 = element_list[int(new_element_text[0])]
+            element2 = element_list[int(new_element_text[1])]
             for i in range(row_amount):
                 if symbol == "/\\":
                     for j in range(len(element1.truth_values)):
@@ -115,21 +125,21 @@ def create_columns(element_list, letter_count):
                             element.truth_values.append(True)
                         else:
                             element.truth_values.append(False)
-                    
+            
                 elif symbol == "\/":
                     for j in range(len(element1.truth_values)):
                         if element1.truth_values[j] == True or element2.truth_values[j] == True:
                             element.truth_values.append(True)
                         else:
                             element.truth_values.append(False)
-                        
+            
                 elif symbol == "<->":
                     for j in range(len(element1.truth_values)):
                         if element1.truth_values[j] == element2.truth_values[j]:
                             element.truth_values.append(True)
                         else:
                             element.truth_values.append(False)
-                            
+            
                 elif symbol == "->":
                     for j in range(len(element1.truth_values)):
                         if element1.truth_values[j] == True and element2.truth_values[j] == True:
@@ -143,11 +153,6 @@ def create_columns(element_list, letter_count):
                 
                 
             
-            
-                
-                
-    
-        
 def assign_truth_values(input):
     element_list, letter_count = parse_formula(input)      
     create_columns(element_list, letter_count)
@@ -163,7 +168,7 @@ def generate_url_id():
     return id
 
 
-assign_truth_values("(P -> Q) \/ (R -> S)")
+assign_truth_values("(P -> Q) \/ (R -> S) ∴ W")
 
 
 
