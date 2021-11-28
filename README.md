@@ -1,6 +1,6 @@
 # Taylor Hannan's Final Project for CS 2353   Fall 2021
-##How to run:
-####Option 1: Running on local machine
+## How to run:
+#### Option 1: Running on local machine
 1. Make sure you have Python3 installed
 2. Make sure you have the Flask library installed. 
    To do this, enter the following into the terminal:
@@ -11,15 +11,15 @@
 5. Paste the link in a web browser (Chrome, Firefox, Safari, etc)
 
 
-####Option 2: Running on Website
+#### Option 2: Running on Website
 You can also run the program using the following link: <link>
 
 
-##Steps for using the program
+## Steps for using the program
 1. Enter formula into the text box
 2. Press enter
 
-##Syntax
+## Syntax
 - Characters you can use for the symbols are on the main page
 - Conclusion is optional
 
