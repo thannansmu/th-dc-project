@@ -73,17 +73,13 @@ def create_columns(element_list, letter_count):
     row_amount = 2 ** letter_count
     amount_true_false = row_amount
     
-    # for q in element_list:
-    #     print(q.text)
-    # 
-    # print("------------------------------------------")
+
     for e, element in enumerate(element_list):
-        # print(element.text)
         flag = True
         if (len(element.text) == 1):
-            # print(amount_true_false)
+            count = amount_true_false / 2
             for i in range(row_amount):
-                if i % amount_true_false == amount_true_false / 2:    #This is problem
+                if count == 0:    #This is problem
                     # print("yo")
                     if flag == True:
                         # print("T")
@@ -91,8 +87,10 @@ def create_columns(element_list, letter_count):
                     else:
                         # print("F")
                         flag = True
+                    count += amount_true_false / 2
                 
                 element.append_truth_value(flag)
+                count -= 1
             
             amount_true_false /= 2
             
@@ -161,22 +159,22 @@ def create_columns(element_list, letter_count):
                 
                 
 def print_table(element_list):
-    print(element_list[1].text)
-    for x in element_list[1].truth_values:
-        print(x)
-    
-    
-    
-    # for element in element_list:
-    #     print(element.text, end='|')
+    # print(element_list[1].text)
+    # for x in element_list[1].truth_values:
+    #     print(x)
     # 
-    # print("")
-    # for i in range(len(element_list[0].truth_values)):
-    #     for j in range(len(element_list)):
-    #         print(element_list[j].truth_values[i], end="|")
-    #     print("")
-    # 
-    # print("")
+    
+    
+    for element in element_list:
+        print(element.text, end='|')
+    
+    print("")
+    for i in range(len(element_list[0].truth_values)):
+        for j in range(len(element_list)):
+            print(element_list[j].truth_values[i], end="|")
+        print("")
+    
+    print("")
                
                 
                 
@@ -198,7 +196,7 @@ def generate_url_id():
     return id
 
 
-assign_truth_values("(P -> Q) \/ (R -> S) ∴ P")
+assign_truth_values("(P -> Q) \/ (R -> S) ∴ P /\ Q")
 
 
 
