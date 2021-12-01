@@ -1,5 +1,5 @@
 <style>
-  html{
+  html {
       background-color:#f0f4fc;
     }
     
@@ -17,7 +17,6 @@
        table-layout: fixed;
        top: 300px;
        width: 800px;
-       
      }
 
      tr, td {
@@ -31,12 +30,13 @@
       position:absolute;
       top:175px;
     }
+    
 </style>
 
 <h1>Truth Table Maker</h1>
 <h2>Enter formula:</h2>
 <form id = "text-box" action="/create_table" method="post">
-    <input type="text">
+    <input type="text" name="formula">
     <input type="submit">
 </form>
 
@@ -44,7 +44,6 @@
 <table>
 
 </table>
-
 
 
 

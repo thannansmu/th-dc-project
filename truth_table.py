@@ -1,4 +1,5 @@
 from element import Element
+from html_templates import main_template
 import random
 import string
 
@@ -79,13 +80,10 @@ def create_columns(element_list, letter_count):
         if (len(element.text) == 1):
             count = amount_true_false / 2
             for i in range(row_amount):
-                if count == 0:    #This is problem
-                    # print("yo")
+                if count == 0:
                     if flag == True:
-                        # print("T")
                         flag = False
                     else:
-                        # print("F")
                         flag = True
                     count += amount_true_false / 2
                 
@@ -96,10 +94,8 @@ def create_columns(element_list, letter_count):
             
         else:
             new_element_text = element.text
-            # print(element.text, "here")
             for i in reversed(range(e)):
                 new_element_text = new_element_text.replace(element_list[i].text, str(i))
-                # print(new_element_text, element_list[i].text)
             
             #Split by symbol                /\  \/  ->  <-> ~
             symbol = ""
@@ -159,12 +155,6 @@ def create_columns(element_list, letter_count):
                 
                 
 def print_table(element_list):
-    # print(element_list[1].text)
-    # for x in element_list[1].truth_values:
-    #     print(x)
-    # 
-    
-    
     for element in element_list:
         print(element.text, end='|')
     
@@ -177,14 +167,11 @@ def print_table(element_list):
     print("")
                
                 
-                
-            
 def assign_truth_values(input):
-    element_list, letter_count = parse_formula(input)
-    # print(letter_count)      
-    elment_list = create_columns(element_list, letter_count)
+    element_list, letter_count = parse_formula(input)    
+    element_list = create_columns(element_list, letter_count)
     print_table(element_list)
-    
+    write_html(element_list)    
     
 def generate_url_id():
     id = ""
@@ -195,8 +182,22 @@ def generate_url_id():
 
     return id
 
+def write_html(element_list):
+    text = "<tr>"
+    for element in element_list:
+        text += "<td>{0}</td>".format(element.text)
+    text += "</tr>\n"
+    for i in range(len(element_list[0].truth_values)):
+        text += "<tr>"
+        for j in range(len(element_list)):
+            text += "<td>{0}</td>".format(element_list[j].truth_values[i])
+        text += "</tr>\n"
+    
+    temp = main_template.format(text)
+    with open("Templates/table.html", "w") as f:
+        f.write(temp)
+    
 
-assign_truth_values("(P -> Q) \/ (R -> S) ∴ P /\ Q")
 
 
 

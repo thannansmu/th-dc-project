@@ -1,6 +1,6 @@
-from flask import Flask, render_template, redirect
+from flask import Flask, render_template, redirect, request
 import random
-from truth_table import generate_url_id
+from truth_table import generate_url_id, assign_truth_values
 
 
 app = Flask(__name__,template_folder = "Templates")
@@ -17,12 +17,13 @@ def truth_table_home():
 
 @app.route("/truth_table=<id>")
 def truth_table(id):
-    return render_template("main_page.html")
+    return render_template("table.html")
     
     
 @app.route("/create_table", methods=['POST', 'GET'])
 def create_table():
     id = generate_url_id()
+    assign_truth_values(request.form["formula"])
     return redirect("/truth_table=" + id)
 
 

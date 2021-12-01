@@ -1,48 +1,49 @@
 main_template = """<style>
-  html{
+  html {{
       background-color:#f0f4fc;
-    }
+    }}
     
-    h1 {
+    h1 {{
       text-align: center;
-    }
+    }}
     
-    h2 {
+    h2 {{
       position:absolute;
       top:100px;
-    }
+    }}
     
-    table {
+    table {{
         position:absolute;
        table-layout: fixed;
        top: 300px;
        width: 800px;
-       
-     }
+     }}
 
-     tr, td {
+     tr, td {{
        background-color: white;
+       color: back;
        border: 1px solid black;
        font-size: 20;
        text-align:center;
-     }
+     }}
     
-    #text-box {
+    #text-box {{
       position:absolute;
       top:175px;
-    }
+    }}
+    
 </style>
 
 <h1>Truth Table Maker</h1>
 <h2>Enter formula:</h2>
 <form id = "text-box" action="/create_table" method="post">
-    <input type="text">
+    <input type="text" name="formula">
     <input type="submit">
 </form>
 
 
 <table>
-
+{0}
 </table>
 """
 
