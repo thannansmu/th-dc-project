@@ -17,7 +17,8 @@ def parse_formula(input):
         prems = formula
         conc = ""
 
-    prems = prems.split(".")
+    if (len(prems) > 1):
+        prems = prems.split(".")
     
     letter_count = 0
     already_used_letters = []
@@ -66,7 +67,8 @@ def parse_formula(input):
     for prem in prems:
         element_list.append(Element(prem))
     
-    element_list.append(Element(conc))
+    if (len(conc) > 0):
+        element_list.append(Element(conc))
     return element_list, letter_count
 
 
@@ -94,62 +96,64 @@ def create_columns(element_list, letter_count):
             
         else:
             new_element_text = element.text
-            for i in reversed(range(e)):
-                new_element_text = new_element_text.replace(element_list[i].text, str(i))
-            
-            #Split by symbol                /\  \/  ->  <-> ~
-            symbol = ""
-            if "/\\" in new_element_text:
-                new_element_text = new_element_text.split("/\\")
-                symbol = "/\\"
-            elif "\/" in new_element_text:
-                new_element_text = new_element_text.split("\/")
-                symbol = "\/"
-            elif "<->" in new_element_text:
-                new_element_text = new_element_text.split("<->")
-                symbol = "<->"
-            elif "->" in new_element_text:
-                new_element_text = new_element_text.split("->")
-                symbol = "->"
-            
-            new_element_text[0] = new_element_text[0].replace("(", "").replace(")", "")
-            new_element_text[1] = new_element_text[1].replace("(", "").replace(")", "")
-            
-            
-            element1 = element_list[int(new_element_text[0])]
-            element2 = element_list[int(new_element_text[1])]
-            for i in range(row_amount):
-                if symbol == "/\\":
-                    for j in range(len(element1.truth_values)):
-                        if element1.truth_values[j] == True and element2.truth_values[j] == True:
-                            element.truth_values.append(True)
-                        else:
-                            element.truth_values.append(False)
-            
-                elif symbol == "\/":
-                    for j in range(len(element1.truth_values)):
-                        if element1.truth_values[j] == True or element2.truth_values[j] == True:
-                            element.truth_values.append(True)
-                        else:
-                            element.truth_values.append(False)
-            
-                elif symbol == "<->":
-                    for j in range(len(element1.truth_values)):
-                        if element1.truth_values[j] == element2.truth_values[j]:
-                            element.truth_values.append(True)
-                        else:
-                            element.truth_values.append(False)
-            
-                elif symbol == "->":
-                    for j in range(len(element1.truth_values)):
-                        if element1.truth_values[j] == True and element2.truth_values[j] == True:
-                            element.truth_values.append(True)
-                        elif element1.truth_values[j] == False and element2.truth_values[j] == True:
-                            element.truth_values.append(True)
-                        elif element1.truth_values[j] == False and element2.truth_values[j] == False:
-                            element.truth_values.append(True)
-                        else:
-                            element.truth_values.append(False)
+            if (len(new_element_text) > 0):
+                for i in reversed(range(e)):
+                    new_element_text = new_element_text.replace(element_list[i].text, str(i))
+                
+                
+                #Split by symbol                /\  \/  ->  <-> ~
+                symbol = ""
+                if "/\\" in new_element_text:
+                    new_element_text = new_element_text.split("/\\")
+                    symbol = "/\\"
+                elif "\/" in new_element_text:
+                    new_element_text = new_element_text.split("\/")
+                    symbol = "\/"
+                elif "<->" in new_element_text:
+                    new_element_text = new_element_text.split("<->")
+                    symbol = "<->"
+                elif "->" in new_element_text:
+                    new_element_text = new_element_text.split("->")
+                    symbol = "->"
+                
+                new_element_text[0] = new_element_text[0].replace("(", "").replace(")", "")
+                new_element_text[1] = new_element_text[1].replace("(", "").replace(")", "")
+                
+                
+                element1 = element_list[int(new_element_text[0])]
+                element2 = element_list[int(new_element_text[1])]
+                for i in range(row_amount):
+                    if symbol == "/\\":
+                        for j in range(len(element1.truth_values)):
+                            if element1.truth_values[j] == True and element2.truth_values[j] == True:
+                                element.truth_values.append(True)
+                            else:
+                                element.truth_values.append(False)
+                
+                    elif symbol == "\/":
+                        for j in range(len(element1.truth_values)):
+                            if element1.truth_values[j] == True or element2.truth_values[j] == True:
+                                element.truth_values.append(True)
+                            else:
+                                element.truth_values.append(False)
+                
+                    elif symbol == "<->":
+                        for j in range(len(element1.truth_values)):
+                            if element1.truth_values[j] == element2.truth_values[j]:
+                                element.truth_values.append(True)
+                            else:
+                                element.truth_values.append(False)
+                
+                    elif symbol == "->":
+                        for j in range(len(element1.truth_values)):
+                            if element1.truth_values[j] == True and element2.truth_values[j] == True:
+                                element.truth_values.append(True)
+                            elif element1.truth_values[j] == False and element2.truth_values[j] == True:
+                                element.truth_values.append(True)
+                            elif element1.truth_values[j] == False and element2.truth_values[j] == False:
+                                element.truth_values.append(True)
+                            else:
+                                element.truth_values.append(False)
                             
     return element_list
                 
