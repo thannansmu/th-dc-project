@@ -26,12 +26,17 @@ def parse_formula(input):
         #Remove spaces
         prem = prem.replace(" ", "")
         #find single letters
-        for c in prem:
+        for i, c in enumerate(prem):
             if c.isalpha() == True and c not in already_used_letters:
                 new_element = Element(c)
                 element_list.append(new_element)
                 already_used_letters.append(c)
                 letter_count += 1
+                
+                if (i > 0 and prem[i - 1] == "~"):
+                    new_element2 = Element(prem[i - 1] + c)
+                    element_list.append(new_element2)
+                
         #find phrases in ()
         left_indexes = []
         right_indexes = []
@@ -73,6 +78,8 @@ def parse_formula(input):
 
 
 def create_columns(element_list, letter_count):
+    # for x in element_list:
+    #     print(x.text)
     row_amount = 2 ** letter_count
     amount_true_false = row_amount
     
@@ -99,10 +106,11 @@ def create_columns(element_list, letter_count):
             if (len(new_element_text) > 0):
                 for i in reversed(range(e)):
                     new_element_text = new_element_text.replace(element_list[i].text, str(i))
-                
-                
+            
                 #Split by symbol                /\  \/  ->  <-> ~
                 symbol = ""
+                if "~" in new_element_text:
+                    new_element_text = [new_element_text[0], new_element_text[1:]]
                 if "/\\" in new_element_text:
                     new_element_text = new_element_text.split("/\\")
                     symbol = "/\\"
@@ -119,10 +127,19 @@ def create_columns(element_list, letter_count):
                 new_element_text[0] = new_element_text[0].replace("(", "").replace(")", "")
                 new_element_text[1] = new_element_text[1].replace("(", "").replace(")", "")
                 
-                
-                element1 = element_list[int(new_element_text[0])]
+                if (new_element_text[0] == "~"):
+                    element1 = "~"
+                else:
+                    element1 = element_list[int(new_element_text[0])]
                 element2 = element_list[int(new_element_text[1])]
                 for i in range(row_amount):
+                    if element1 == "~":
+                        for j in range(len(element2.truth_values)):
+                            if element2.truth_values[j] == True:
+                                element.truth_values.append(False)
+                            else:
+                                element.truth_values.append(True)
+                    
                     if symbol == "/\\":
                         for j in range(len(element1.truth_values)):
                             if element1.truth_values[j] == True and element2.truth_values[j] == True:
