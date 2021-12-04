@@ -12,11 +12,17 @@ main_template = """<style>
       top:100px;
     }}
     
+    h3 {{
+      position:absolute;
+      top:100px;
+      right: 200px;
+    }}
+    
     table {{
         position:absolute;
        table-layout: fixed;
        top: 300px;
-       width: 800px;
+       width: 100%;
      }}
 
      tr, td {{
@@ -40,6 +46,8 @@ main_template = """<style>
     <input type="text" name="formula">
     <input type="submit">
 </form>
+
+<h3>Symbols: -> <-> \/ /\ ∴ </h3>
 
 
 <table>

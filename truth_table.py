@@ -71,20 +71,26 @@ def parse_formula(input):
     #Add prems and conclusion to element list
     for prem in prems:
         element_list.append(Element(prem))
-    
+        
     if (len(conc) > 0):
-        element_list.append(Element(conc))
+        already_in = False
+        temp_element = Element(conc)
+        for element in element_list:
+            if element.text == temp_element.text:
+                already_in = True
+        
+        if (already_in == False):
+            element_list.append(Element(conc))
     return element_list, letter_count
 
 
 def create_columns(element_list, letter_count):
-    # for x in element_list:
-    #     print(x.text)
+    already_used_elements = []
     row_amount = 2 ** letter_count
     amount_true_false = row_amount
     
-
     for e, element in enumerate(element_list):
+        #check if element already has assigned truth values
         flag = True
         if (len(element.text) == 1):
             count = amount_true_false / 2
@@ -171,27 +177,14 @@ def create_columns(element_list, letter_count):
                                 element.truth_values.append(True)
                             else:
                                 element.truth_values.append(False)
-                            
+        already_used_elements.append(element)
+        
+        
     return element_list
-                
-                
-def print_table(element_list):
-    for element in element_list:
-        print(element.text, end='|')
-    
-    print("")
-    for i in range(len(element_list[0].truth_values)):
-        for j in range(len(element_list)):
-            print(element_list[j].truth_values[i], end="|")
-        print("")
-    
-    print("")
-               
-                
+                        
 def assign_truth_values(input):
     element_list, letter_count = parse_formula(input)    
     element_list = create_columns(element_list, letter_count)
-    print_table(element_list)
     write_html(element_list)    
     
 def generate_url_id():
