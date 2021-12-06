@@ -3,6 +3,7 @@ import random
 from truth_table import generate_url_id, assign_truth_values
 
 app = Flask(__name__,template_folder = "Templates")
+app.config['TEMPLATES_AUTO_RELOAD'] = True
 
 #redirects to main page
 @app.route("/")
