@@ -21,7 +21,7 @@ You can also run the program using the following link: https://thannansmu.python
 
 ## Syntax
 - Characters you can use for the symbols are on the main page
-- Conclusion is optional
+- Conclusion is optional, but needed if more than one premise
 - Must have at least one premise (no conclusion only formulas)
 - Simplify negations before typing them in. Example: ~~P must be typed in as P
 - IMPORTANT: Program does not assume parentheses, so you must type them out

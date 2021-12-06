@@ -33,6 +33,7 @@ def parse_formula(input):
             if i == 0 and prem[i] == "~" and prem[1].isalpha() and prem[1] not in already_used_letters:
                 element_list.append(Element(prem[1]))
                 already_used_letters.append(prem[1])
+                already_negative.append(prem[1])
                 letter_count += 1
             
             elif i > 0 and prem[i - 1] == "~" and c.isalpha() and c not in already_negative:
@@ -52,11 +53,14 @@ def parse_formula(input):
         total_indexes = []
         
         for i,c in enumerate(prem):
-            if i == 0 and prem[i] == "~":
+            if i == 0 and prem[i] == "~" and prem not in already_negative:
                 if ")" in prem:
-                    element_list.append(Element(prem[:prem.index(")") + 1]))
+                    tempElement = Element(prem[:prem.index(")") + 1])
+                    element_list.append(tempElement)
                 else:
-                    element_list.append(Element(prem))
+                    tempElement = Element(prem)
+                    element_list.append(tempElement)
+                already_negative.append(tempElement)
                     
             if c == "(":
                 left_indexes.append(i)
@@ -111,6 +115,7 @@ def create_columns(element_list, letter_count):
     amount_true_false = row_amount
     
     for e, element in enumerate(element_list):
+        # print(element.text)
         #check if element already has assigned truth values
         flag = True
         if (len(element.text) == 1):
@@ -151,6 +156,7 @@ def create_columns(element_list, letter_count):
                     new_element_text = new_element_text.split("->")
                     symbol = "->"
                 
+                # print(new_element_text)
                 new_element_text[0] = new_element_text[0].replace("(", "").replace(")", "")
                 new_element_text[1] = new_element_text[1].replace("(", "").replace(")", "")
                 
