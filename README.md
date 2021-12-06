@@ -12,7 +12,7 @@
 
 
 #### Option 2: Running on Website
-You can also run the program using the following link: [thannansmu.pythonanywhere.com/] (https://thannansmu.pythonanywhere.com/)
+You can also run the program using the following link: https://thannansmu.pythonanywhere.com/truth_table_home
 
 
 ## Steps for using the program
