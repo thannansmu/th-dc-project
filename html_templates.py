@@ -54,7 +54,3 @@ main_template = """<style>
 {0}
 </table>
 """
-
-
-
-

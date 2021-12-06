@@ -3,6 +3,7 @@ from html_templates import main_template
 import random
 import string
 
+#splits formula into premises and conclusion and creates element objects
 def parse_formula(input):
     #split formula
     formula = input.replace(" ", "").split("∴")
@@ -92,10 +93,7 @@ def parse_formula(input):
             element_list.append(Element(prem))
             
     
-    #Add prems and conclusion to element list
-    # for prem in prems:
-    #     element_list.append(Element(prem))
-        
+    #Add conclusion to element list    
     if (len(conc) > 0):
         already_in = False
         for element in element_list:
@@ -106,14 +104,13 @@ def parse_formula(input):
             element_list.append(Element(conc))
     return element_list, letter_count
 
-
+#creates the columns of the truth table and assigns truth values
 def create_columns(element_list, letter_count):
     already_used_elements = []
     row_amount = 2 ** letter_count
     amount_true_false = row_amount
     
     for e, element in enumerate(element_list):
-        # print(element.text)
         #check if element already has assigned truth values
         flag = True
         if (len(element.text) == 1):
@@ -137,7 +134,7 @@ def create_columns(element_list, letter_count):
                 for i in reversed(range(e)):
                     new_element_text = new_element_text.replace(element_list[i].text, str(i))
             
-                #Split by symbol                /\  \/  ->  <-> ~
+                #Split by symbol
                 symbol = ""
                 if "~" in new_element_text:
                     new_element_text = [new_element_text[0], new_element_text[1:]]
@@ -156,12 +153,12 @@ def create_columns(element_list, letter_count):
                 
                 new_element_text[0] = new_element_text[0].replace("(", "").replace(")", "")
                 new_element_text[1] = new_element_text[1].replace("(", "").replace(")", "")
-                # print(new_element_text)
                 
                 if (new_element_text[0] == "~"):
                     element1 = "~"
                 else:
                     element1 = element_list[int(new_element_text[0])]
+                    
                 element2 = element_list[int(new_element_text[1])]
                 for i in range(row_amount):
                     if element1 == "~":
@@ -206,14 +203,16 @@ def create_columns(element_list, letter_count):
         
         
     return element_list
-    
+
+#main function that calls the other ones
 def assign_truth_values(input):
     element_list, letter_count = parse_formula(input)    
     #sort elements so they can be displyed in order of length in the table
     element_list.sort(key=lambda x: len(x.text))
     element_list = create_columns(element_list, letter_count)
     write_html(element_list)    
-    
+
+#generates id for truth table url (mainly for website version)
 def generate_url_id():
     id = ""
     for i in range(10):
@@ -223,6 +222,7 @@ def generate_url_id():
 
     return id
 
+#writes truth table to html file
 def write_html(element_list):
     text = "<tr>"
     for element in element_list:
@@ -238,11 +238,3 @@ def write_html(element_list):
     with open("Templates/table.html", "w") as f:
         f.write(temp)
     
-
-
-
-
-
-
-
-
