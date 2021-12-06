@@ -12,7 +12,7 @@
 
 
 #### Option 2: Running on Website
-You can also run the program using the following link: <a>href="thannansmu.pythonanywhere.com">thannansmu.pythonanywhere.com</a>
+You can also run the program using the following link: [thannansmu.pythonanywhere.com/] (https://thannansmu.pythonanywhere.com/)
 
 
 ## Steps for using the program
