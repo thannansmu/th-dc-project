@@ -22,9 +22,10 @@ You can also run the program using the following link: https://thannansmu.python
 ## Syntax
 - Characters you can use for the symbols are on the main page
 - Conclusion is optional, but needed if more than one premise
+- Conclusion can not have new variable not seen in premises
 - Must have at least one premise (no conclusion only formulas)
 - Simplify negations before typing them in. Example: ~~P must be typed in as P
 - IMPORTANT: Program does not assume parentheses, so you must type them out
 Example: P /\ Q -> R must be typed in as (P /\ Q) -> R
-- However, you don't need outermost parentheses. Example: If P /\ Q is by itself, you can type it in as is
+- HOWEVER, you don't need outermost parentheses. Example: If P /\ Q is by itself, type it in as is
 

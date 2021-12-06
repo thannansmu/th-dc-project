@@ -19,6 +19,10 @@ def parse_formula(input):
     if (len(prems) > 1):
         prems = prems.split(".")
     
+    #add conclusion to premise list so that it can also be parsed
+    if (len(conc) > 1):
+        prems.append(conc)
+    
     letter_count = 0
     already_used_letters = []
     already_negative = []
@@ -33,15 +37,14 @@ def parse_formula(input):
             if i == 0 and prem[i] == "~" and prem[1].isalpha() and prem[1] not in already_used_letters:
                 element_list.append(Element(prem[1]))
                 already_used_letters.append(prem[1])
-                already_negative.append(prem[1])
                 letter_count += 1
             
-            elif i > 0 and prem[i - 1] == "~" and c.isalpha() and c not in already_negative:
+            elif i > 0 and prem[i - 1] == "~" and c.isalpha() and prem[i - 1] + c not in already_negative:
                 new_element2 = Element(prem[i - 1] + c)
                 element_list.append(new_element2)
-                already_negative.append(c)
-                
-            if c.isalpha() == True and c not in already_used_letters:
+                already_negative.append(prem[i - 1] + c)
+            
+            elif c.isalpha() == True and c not in already_used_letters:
                 new_element = Element(c)
                 element_list.append(new_element)
                 already_used_letters.append(c)
@@ -53,15 +56,24 @@ def parse_formula(input):
         total_indexes = []
         
         for i,c in enumerate(prem):
-            if i == 0 and prem[i] == "~" and prem not in already_negative:
+            if i == 0 and c == "~" and prem[1] == "(" and prem not in already_negative:
                 if ")" in prem:
                     tempElement = Element(prem[:prem.index(")") + 1])
                     element_list.append(tempElement)
                 else:
                     tempElement = Element(prem)
                     element_list.append(tempElement)
-                already_negative.append(tempElement)
-                    
+                already_negative.append(prem)
+            
+            elif i > 1 and c == "~" and prem[i + 1] == "(" and prem[i:prem.index(")")] not in already_negative:
+                if ")" in prem:
+                    tempElement = Element(prem[i:prem.index(")") + 1])
+                    element_list.append(tempElement)
+                else:
+                    tempElement = Element(prem)
+                    element_list.append(tempElement)
+                already_negative.append(prem[i:prem.index(")") + 1])
+               
             if c == "(":
                 left_indexes.append(i)
                 total_indexes.append(i)
@@ -95,17 +107,7 @@ def parse_formula(input):
         
         if (flag == False):
             element_list.append(Element(prem))
-            
-    
-    #Add conclusion to element list    
-    if (len(conc) > 0):
-        already_in = False
-        for element in element_list:
-            if element.text == conc:
-                already_in = True
-        
-        if (already_in == False):
-            element_list.append(Element(conc))
+
     return element_list, letter_count
 
 #creates the columns of the truth table and assigns truth values
@@ -115,7 +117,6 @@ def create_columns(element_list, letter_count):
     amount_true_false = row_amount
     
     for e, element in enumerate(element_list):
-        # print(element.text)
         #check if element already has assigned truth values
         flag = True
         if (len(element.text) == 1):
