@@ -22,4 +22,8 @@ You can also run the program using the following link: <link>
 ## Syntax
 - Characters you can use for the symbols are on the main page
 - Conclusion is optional
+- Must have at least one premise (no conclusion only formulas)
+- Simplify negations before typing them in. Example: ~~P must be typed in as P
+- IMPORTANT: Program does not assume parentheses, so you must type them out
+Example: P /\ Q -> R must be typed in as (P /\ Q) -> R
 

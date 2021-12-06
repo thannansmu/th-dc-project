@@ -3,8 +3,6 @@ from html_templates import main_template
 import random
 import string
 
-# input = input("Enter formula: ")
-
 def parse_formula(input):
     #split formula
     formula = input.replace(" ", "").split("∴")
@@ -22,27 +20,43 @@ def parse_formula(input):
     
     letter_count = 0
     already_used_letters = []
-    for prem in prems:
+    already_negative = []
+    
+    symbol_list = ["->", "<->", "/\\", "\/"] 
+    
+    for p, prem in enumerate(prems):
         #Remove spaces
         prem = prem.replace(" ", "")
         #find single letters
         for i, c in enumerate(prem):
+            if i == 0 and prem[i] == "~" and prem[1].isalpha() and prem[1] not in already_used_letters:
+                element_list.append(Element(prem[1]))
+                already_used_letters.append(prem[1])
+                letter_count += 1
+            
+            elif i > 0 and prem[i - 1] == "~" and c.isalpha() and c not in already_negative:
+                new_element2 = Element(prem[i - 1] + c)
+                element_list.append(new_element2)
+                already_negative.append(c)
+                
             if c.isalpha() == True and c not in already_used_letters:
                 new_element = Element(c)
                 element_list.append(new_element)
                 already_used_letters.append(c)
                 letter_count += 1
-                
-                if (i > 0 and prem[i - 1] == "~"):
-                    new_element2 = Element(prem[i - 1] + c)
-                    element_list.append(new_element2)
-                
+    
         #find phrases in ()
         left_indexes = []
         right_indexes = []
         total_indexes = []
         
         for i,c in enumerate(prem):
+            if i == 0 and prem[i] == "~":
+                if ")" in prem:
+                    element_list.append(Element(prem[:prem.index(")") + 1]))
+                else:
+                    element_list.append(Element(prem))
+                    
             if c == "(":
                 left_indexes.append(i)
                 total_indexes.append(i)
@@ -67,16 +81,25 @@ def parse_formula(input):
                         new_element = Element(prem[i + 1:current_in_total])
                         element_list.append(new_element)
                         break
+        
+    for prem in prems:  
+        flag = False              
+        for el in element_list:
+            if prem == el.text:
+                flag = True
+        
+        if (flag == False):
+            element_list.append(Element(prem))
+            
     
     #Add prems and conclusion to element list
-    for prem in prems:
-        element_list.append(Element(prem))
+    # for prem in prems:
+    #     element_list.append(Element(prem))
         
     if (len(conc) > 0):
         already_in = False
-        temp_element = Element(conc)
         for element in element_list:
-            if element.text == temp_element.text:
+            if element.text == conc:
                 already_in = True
         
         if (already_in == False):
@@ -90,6 +113,7 @@ def create_columns(element_list, letter_count):
     amount_true_false = row_amount
     
     for e, element in enumerate(element_list):
+        # print(element.text)
         #check if element already has assigned truth values
         flag = True
         if (len(element.text) == 1):
@@ -132,6 +156,7 @@ def create_columns(element_list, letter_count):
                 
                 new_element_text[0] = new_element_text[0].replace("(", "").replace(")", "")
                 new_element_text[1] = new_element_text[1].replace("(", "").replace(")", "")
+                # print(new_element_text)
                 
                 if (new_element_text[0] == "~"):
                     element1 = "~"
@@ -140,35 +165,35 @@ def create_columns(element_list, letter_count):
                 element2 = element_list[int(new_element_text[1])]
                 for i in range(row_amount):
                     if element1 == "~":
-                        for j in range(len(element2.truth_values)):
+                        for j in range(row_amount):
                             if element2.truth_values[j] == True:
                                 element.truth_values.append(False)
                             else:
                                 element.truth_values.append(True)
                     
                     if symbol == "/\\":
-                        for j in range(len(element1.truth_values)):
+                        for j in range(row_amount):
                             if element1.truth_values[j] == True and element2.truth_values[j] == True:
                                 element.truth_values.append(True)
                             else:
                                 element.truth_values.append(False)
                 
                     elif symbol == "\/":
-                        for j in range(len(element1.truth_values)):
+                        for j in range(row_amount):
                             if element1.truth_values[j] == True or element2.truth_values[j] == True:
                                 element.truth_values.append(True)
                             else:
                                 element.truth_values.append(False)
                 
                     elif symbol == "<->":
-                        for j in range(len(element1.truth_values)):
+                        for j in range(row_amount):
                             if element1.truth_values[j] == element2.truth_values[j]:
                                 element.truth_values.append(True)
                             else:
                                 element.truth_values.append(False)
                 
                     elif symbol == "->":
-                        for j in range(len(element1.truth_values)):
+                        for j in range(row_amount):
                             if element1.truth_values[j] == True and element2.truth_values[j] == True:
                                 element.truth_values.append(True)
                             elif element1.truth_values[j] == False and element2.truth_values[j] == True:
@@ -181,9 +206,11 @@ def create_columns(element_list, letter_count):
         
         
     return element_list
-                        
+    
 def assign_truth_values(input):
     element_list, letter_count = parse_formula(input)    
+    #sort elements so they can be displyed in order of length in the table
+    element_list.sort(key=lambda x: len(x.text))
     element_list = create_columns(element_list, letter_count)
     write_html(element_list)    
     
