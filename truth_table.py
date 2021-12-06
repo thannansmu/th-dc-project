@@ -40,6 +40,11 @@ def parse_formula(input):
                 letter_count += 1
             
             elif i > 0 and prem[i - 1] == "~" and c.isalpha() and prem[i - 1] + c not in already_negative:
+                if (c not in already_used_letters):
+                    element_list.append(Element(c))
+                    already_used_letters.append(c)
+                    letter_count += 1
+                
                 new_element2 = Element(prem[i - 1] + c)
                 element_list.append(new_element2)
                 already_negative.append(prem[i - 1] + c)
@@ -57,6 +62,7 @@ def parse_formula(input):
         
         for i,c in enumerate(prem):
             if i == 0 and c == "~" and prem[1] == "(" and prem not in already_negative:
+                print("here")
                 if ")" in prem:
                     tempElement = Element(prem[:prem.index(")") + 1])
                     element_list.append(tempElement)
