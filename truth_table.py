@@ -62,6 +62,7 @@ def parse_formula(input):
         
         for i,c in enumerate(prem):
             if i == 0 and c == "~" and prem[1] == "(" and prem not in already_negative:
+                print("here")
                 if ")" in prem:
                     tempElement = Element(prem[:prem.index(")") + 1])
                     element_list.append(tempElement)
